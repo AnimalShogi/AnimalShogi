@@ -9,9 +9,19 @@ import SwiftUI
 
 struct BackGroundView: View {
     var body: some View {
-        Image("playboard")
-            .resizable()
-            .scaledToFit()
+        VStack(spacing: 6) {
+            ForEach(0..<4) { row in
+                HStack(spacing: 3) {
+                    ForEach(0..<3) { col in
+                        Rectangle()
+                            .fill(Color.yellow.opacity(0.3))
+                            .frame(width: 100, height: 100)
+                    }
+                }
+            }
+            
+        }
+      
     }
 }
 
