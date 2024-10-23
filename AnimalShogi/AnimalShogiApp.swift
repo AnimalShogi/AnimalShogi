@@ -11,7 +11,7 @@ import SwiftUI
 struct AnimalShogiApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            SyougiView()
         }
     }
 }
