@@ -10,6 +10,7 @@ import SwiftUI
 struct SyougiView: View {
     let boardRows = 4
     let boardCols = 3
+     @StateObject var game = Game()
     var body: some View {
         ZStack{
             //    BackGroundView()
@@ -17,12 +18,24 @@ struct SyougiView: View {
                 
                 ButtonView()
                 
-                
+    
                 VStack(spacing: 1) {
                     ForEach(0..<4) { row in
                         HStack(spacing: 1) {
                             ForEach(0..<3) { col in
-                                CellView()
+                                CellView(piece: game.gameBoard.board[row][col])
+                                    .onTapGesture {
+                                        let position = Position(row: row, col: col)
+                                        // 駒の移動処理
+                                        if let selected = game.selectedPiecePosition {
+                                            print("move", selected, position)
+                                            _ = game.movePiece(to: position)
+                                        } else {
+                                            print("select", position)
+                                            game.selectPiece(at: position)
+                                        }
+        //                                game.movePiece(to: position)
+                                    }
                             }
                         }
                     }
@@ -102,6 +115,7 @@ struct ButtonView: View{
                     Text("↑")
                         .foregroundStyle(.white)
                 }
+                
                 .onTapGesture {
                     
                 }
@@ -145,39 +159,30 @@ struct ButtonView: View{
 }
 
 struct CellView: View {
-    //   let piece: AnimalShogiGame.BoardPiece
-    
+  
+    let piece: Piece?
     var body: some View {
         ZStack {
             Rectangle()
                 .fill(Color.yellow.opacity(0.3))
                 .frame(width: 100, height: 100)
             
-            //            if piece.piece != .none {
-            //                Text(piece.piece.image)
-            //                    .font(.system(size: 40))
-            //                    .rotationEffect(piece.player == .second ? .degrees(180) : .degrees(0))
-            //            }
+            if let piece = piece {
+                Image(pieceDisplay(piece: piece))
+                    .resizable()
+                    .scaledToFit()
+                    .padding(.all, 10)
+            }
+        }
+    }
+    func pieceDisplay(piece: Piece) -> String {
+        switch piece.type {
+        case .lion: return "lion"
+        case .elephant: return "zou"
+        case .giraffe: return "kirin"
+        case .chick: return "hiyoko"
+        case .hen: return "niwatori"
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
