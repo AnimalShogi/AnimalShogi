@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Position {
+struct Position: Equatable {
     let row: Int
     let col: Int
 }
@@ -25,9 +25,9 @@ func isValidMove(from: Position, to: Position, piece: Piece, board: GameBoard) -
         return (rowDiff == 0 && colDiff == 1) || (rowDiff == 1 && colDiff == 0)
     case .chick:
         if piece.player == .player1 {
-            return from.row - 1 == to.row && from.col == to.col
-        } else {
             return from.row + 1 == to.row && from.col == to.col
+        } else {
+            return from.row - 1 == to.row && from.col == to.col
         }
     case .hen:
         return rowDiff <= 1 && colDiff <= 1
