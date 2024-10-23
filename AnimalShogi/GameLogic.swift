@@ -7,12 +7,28 @@
 
 import Foundation
 
-class Game {
-    var gameBoard = GameBoard()
-    var currentPlayer: Player = .player1
+class Game: ObservableObject {
+    @Published var gameBoard = GameBoard()
+    @Published var currentPlayer: Player = .player1
+    @Published var selectedPiecePosition: Position?
     
-    func movePiece(from: Position, to: Position) -> Bool {
-        guard let piece = gameBoard.board[from.row][from.col] else {
+    func selectPiece(at position: Position) {
+        if let piece = gameBoard.board[position.row][position.col], piece.player == currentPlayer {
+            selectedPiecePosition = position
+        } else  {
+            selectedPiecePosition = nil
+        }
+    }
+    
+    func movePiece(to: Position) -> Bool {
+        
+        print("from", selectedPiecePosition)
+        print("to", to)
+        
+        guard let selectedPiecePosition else {
+            return false
+        }
+        guard let piece = gameBoard.board[selectedPiecePosition.row][selectedPiecePosition.col] else {
             return false // 駒がない
         }
         
@@ -20,10 +36,16 @@ class Game {
             return false // 自分の駒ではない
         }
         
-        if isValidMove(from: from, to: to, piece: piece, board: gameBoard) {
+        if to.row == selectedPiecePosition.row && to.col == selectedPiecePosition.col {
+            self.selectedPiecePosition = nil
+            return false
+        }
+        
+        if isValidMove(from: selectedPiecePosition, to: to, piece: piece, board: gameBoard) {
             // 駒を移動させる
             gameBoard.board[to.row][to.col] = piece
-            gameBoard.board[from.row][from.col] = nil
+            gameBoard.board[selectedPiecePosition.row][selectedPiecePosition.col] = nil
+            self.selectedPiecePosition = nil
             
             // 勝利条件をチェックする（ライオンを取ったか）
             if let targetPiece = gameBoard.board[to.row][to.col], targetPiece.type == .lion {
