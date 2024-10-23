@@ -6,3 +6,8 @@
 //
 
 import Foundation
+
+enum Role: String {
+    case first
+    case second
+}
