@@ -17,7 +17,7 @@ struct ContentView: View {
                 HStack(spacing: 2) {
                     ForEach(0..<3, id: \.self) { col in
                         
-                        CellView(piece: game.gameBoard.board[row][col])
+                        CellAView(piece: game.gameBoard.board[row][col])
                             .onTapGesture {
                                 let position = Position(row: row, col: col)
                                 // 駒の移動処理
@@ -37,7 +37,7 @@ struct ContentView: View {
     }
 }
 
-struct CellView: View {
+struct CellAView: View {
     let piece: Piece?
     
     var body: some View {
